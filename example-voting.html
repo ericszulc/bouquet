@@ -1,0 +1,148 @@
+<html>
+    <head>
+        <script src="js/diversity-mechanism.js"></script>
+    </head>
+    <body>
+        <table width="100%">
+            <tr>
+                <td style="vertical-align: top;"><div id="for"></div></td>
+                <td style="vertical-align: top;"><div id="against"></div></td>
+            </tr>
+        </table>
+        
+        
+
+        <script>
+
+            var persons = [];
+            /*
+            persons.push({'race':'white','gender':'male','age':'20-24'});
+            persons.push({'race':'white','gender':'female','age':'25-29'});
+            persons.push({'race':'black','gender':'male','age':'60-69'});
+            persons.push({'race':'asian','gender':'non-binary','age':'20-24'});
+            persons.push({'race':'white','gender':'male','age':'30-39'});
+            persons.push({'race':'latino','gender':'male','age':'50-59'});
+            persons.push({'race':'black','gender':'female','age':'30-39'});
+            persons.push({'race':'pacific islander','gender':'male','age':'50-59'});
+            persons.push({'race':'black','gender':'female','age':'40-49'});
+            */
+
+            /*
+            persons.push({'race':'white','gender':'male','age':'30-39'});
+            persons.push({'race':'white','gender':'male','age':'30-39'});
+            persons.push({'race':'black','gender':'male','age':'60-69'});
+            persons.push({'race':'asian','gender':'female','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'30-39'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'female','age':'30-39'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'female','age':'50-59'});
+            */
+
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'black','gender':'female','age':'30-39'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+            persons.push({'race':'white','gender':'male','age':'50-59'});
+
+            var attributes = [];
+            attributes.push('race','gender','age');
+
+            var vote = {};
+            vote.for = [];
+            vote.against = [];
+
+            persons.forEach(
+                (p) => {
+                    var r = Math.random();
+                    if( r < .5){
+                        vote.for.push( p );
+                    }else{
+                        vote.against.push( p );
+                    }
+                }
+            );
+
+            var d = new DiversityMechanism( attributes );
+
+            var d_scores =  d.getGroupsNormalizedScores( vote );
+            
+
+            document.getElementById('for').innerHTML += 'OVERALL SCORE: '+d_scores.for.score+'<br/><hr/>';
+            document.getElementById('against').innerHTML += 'OVERALL SCORE: '+d_scores.against.score+'<br/><hr/>';
+            
+            d_scores.for.entities.forEach(
+                (e) => {
+                    for( var p in e ){
+                        if( p != 'score' ){
+                            document.getElementById('for').innerHTML += '<strong>'+p+'</strong> '+e[p]+'<br/>';
+                        }
+                    }   
+                    document.getElementById('for').innerHTML += '<strong>Score: </strong>'+e.score.normalized+'<br/><hr/>';
+                }
+            )
+
+            if( d_scores.for.score > d_scores.against.score ){
+                document.getElementById('for').innerHTML += '<strong>WINS</strong><br/>';
+            }
+
+
+            d_scores.against.entities.forEach(
+                (e) => {
+                    for( var p in e ){
+                        if( p != 'score' ){
+                            document.getElementById('against').innerHTML += '<strong>'+p+'</strong> '+e[p]+'<br/>';
+                        }    
+                    }
+                    document.getElementById('against').innerHTML += '<strong>Score: </strong>'+e.score.normalized+'<br/><hr/>';
+                }
+            )
+
+            if( d_scores.against.score > d_scores.for.score ){
+                document.getElementById('against').innerHTML += '<strong>WINS</strong><br/>';
+            }
+            
+
+            persons1 = [];
+            persons2 = [];
+            persons1.push({'race':'white','gender':'male','age':'20-24'});
+            persons1.push({'race':'white','gender':'female','age':'25-29'});
+            persons1.push({'race':'black','gender':'male','age':'60-69'});
+            persons1.push({'race':'asian','gender':'non-binary','age':'20-24'});
+            persons2.push({'race':'white','gender':'male','age':'30-39'});
+            persons2.push({'race':'latino','gender':'female','age':'40-49'});
+            persons2.push({'race':'black','gender':'female','age':'30-39'});
+            persons2.push({'race':'pacific islander','gender':'non-binary','age':'50-59'});
+            persons2.push({'race':'black','gender':'female','age':'40-49'});
+
+            console.log( 
+               d.addToGroup( persons1, persons2, 2 )
+            );
+
+            
+            var persons3 = [];
+            persons3.push({'race':'white','gender':'male','age':'20-24'});
+            persons3.push({'race':'white','gender':'female','age':'25-29'});
+            persons3.push({'race':'black','gender':'male','age':'60-69'});
+            persons3.push({'race':'asian','gender':'non-binary','age':'20-24'});
+            persons3.push({'race':'white','gender':'male','age':'30-39'});
+            persons3.push({'race':'latino','gender':'male','age':'50-59'});
+            persons3.push({'race':'black','gender':'female','age':'30-39'});
+            persons3.push({'race':'pacific islander','gender':'male','age':'50-59'});
+            persons3.push({'race':'black','gender':'female','age':'40-49'});
+
+            console.log( 
+                d.getGroup( persons3, 4 )
+            );
+
+            console.log( 
+                d.breakoutGroups( persons3, 3 )
+            );
+            
+        </script>
+    </body>
+</html>
